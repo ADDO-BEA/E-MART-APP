@@ -56,7 +56,6 @@ export async function POST(req: NextRequest){
                 orderDate: new Date().toISOString(),
             })
         } catch (error:unknown) {
-            // console.error('sanity create error:', error.message);
        return NextResponse.json({error: 'sanity create error'}, {status: 500});
         }
         

@@ -188,15 +188,24 @@ function CartPage() {
     setIsLoading(false);
   }
 };
-
+  // subtotal and total calculation
+  // calculation of subtotal 
 const selectedCartItems = items.filter((item) => selectedItems.has(item._id));
 
 const selectedSubtotal = selectedCartItems.reduce(
-  (sum, item) => sum + (item.price - (item.discount ? (item.price * item.discount) / 100 : 0)) * item.quantity,
+  (sum, item) => sum + item.price * item.quantity,
+  0
+);
+// /calculation of total 
+const selectedTotalAmount = selectedCartItems.reduce(
+  (sum, item) =>
+    sum +
+    (item.price - (item.discount ? (item.price * item.discount) / 100 : 0)) * item.quantity,
   0
 );
 
-const selectedTotal = selectedSubtotal; 
+
+
   return (
     <div className="p-6 mt-6 max-w-screen-lg mx-auto mb-6 border border-gray-300 rounded-lg shadow-lg">
       <div className="mb-4">
@@ -233,7 +242,7 @@ const selectedTotal = selectedSubtotal;
         </div>
         <div className="flex justify-between">
           <span className="font-semibold">Total:</span>
-          <span>{`$${selectedTotal.toFixed(2)}`}</span>
+          <span>{`$${selectedTotalAmount.toFixed(2)}`}</span>
         </div>
         <button
           onClick={handleClearCart}

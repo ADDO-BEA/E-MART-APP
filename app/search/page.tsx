@@ -19,7 +19,7 @@ const SearchPage = async ({ searchParams }: Props) => {
     return (
       <div className='flex flex-col items-center justify-center min-h-screen bg-gray-100'>
         <div className='bg-white p-8 rounded shadow-md text-center'>
-          <h1 className='text-2xl font-bold mb-4'>Sorry, no products found for "<span className='text-blue-500'>{query}</span>"</h1>
+          <h1 className='text-2xl font-bold mb-4'>Sorry, no products found for &quot;<span className='text-blue-500'>{query}</span>&quot;</h1>
           <p className='mb-4'>Try searching for something else</p>
           
         </div>

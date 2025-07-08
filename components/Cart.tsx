@@ -8,7 +8,7 @@ import { RootState } from '@/redux/store';
 export interface CartItem {
   _id: string;
   name: string;
-  image: any; 
+  image: string; // or image: { ... } if it's an object
   price: number;
   quantity: number;
   discount?: number;
