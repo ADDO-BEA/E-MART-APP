@@ -23,7 +23,22 @@ export const PRODUCT_BY_SLUG = defineQuery(`
 `); 
 
 export const PRODUCT_BY_CATEGORY = defineQuery(`
-  *[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)] | order(name asc)`);
+*[_type == "product" && references(*[_type == "category" && slug.current == $slug]._id)] | order(name asc){
+  id,
+    name,
+    price,
+    description,
+    discount,
+    stock,
+    slug,
+    image,
+  category[]->{
+      _ref,
+      _type,
+      _key,
+      title
+    }
+}`);
 export const PRODUCT_SEARCH_QUERY = defineQuery(`*[_type=='product' && name match $searchParams] | order(name asc)`);
  export const ORDER_QUERY = defineQuery(`
   *[_type == "order" && clerkUserId == $userId] 

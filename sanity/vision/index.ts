@@ -6,12 +6,6 @@ import {PRODUCT_BY_SLUG,} from './query'
 
 
 
-type Product= {
-    name:string;
-    description:string;
-    price:number;
-    image:any;
-};
 
 
 export const getOrder =async (userId:string) =>{

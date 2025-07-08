@@ -1,0 +1,658 @@
+[
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "options": {
+          "source": "title"
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "name": "description",
+        "type": "text"
+      }
+    ],
+    "name": "category",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "name": "title",
+        "type": "string"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "title": "Sale Description"
+      },
+      {
+        "description": "Discount badge sale",
+        "name": "badge",
+        "type": "string",
+        "title": "Discount Badge"
+      },
+      {
+        "description": "Discount Amount",
+        "name": "discountAmount",
+        "type": "number"
+      },
+      {
+        "name": "couponCode",
+        "type": "string"
+      },
+      {
+        "name": "validFrom",
+        "type": "datetime"
+      },
+      {
+        "name": "validUntil",
+        "type": "datetime"
+      },
+      {
+        "initialValue": true,
+        "description": "Toggle to activate or deactivate sale",
+        "name": "isActive",
+        "type": "boolean"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "image",
+        "title": "Product Image"
+      }
+    ],
+    "name": "sale",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "name",
+        "type": "string",
+        "title": "Product Name"
+      },
+      {
+        "options": {
+          "source": "name",
+          "maxLength": 96
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "custom"
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "slug",
+        "type": "slug"
+      },
+      {
+        "options": {
+          "hotspot": true
+        },
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "image",
+        "type": "image",
+        "title": "Product Image"
+      },
+      {
+        "name": "description",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "price",
+        "type": "number"
+      },
+      {
+        "initialValue": 0,
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "discount",
+        "type": "number"
+      },
+      {
+        "of": [
+          {
+            "to": [
+              {
+                "type": "category"
+              }
+            ],
+            "type": "reference",
+            "title": "Reference to category"
+          }
+        ],
+        "name": "category",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "stock",
+        "type": "number"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "name": "label",
+                "type": "string",
+                "title": "Color Label"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "regex",
+                        "constraint": {
+                          "pattern": "/^#[0-9A-Fa-f]{6}$/",
+                          "name": "hex color",
+                          "invert": false
+                        }
+                      }
+                    ],
+                    "level": "error",
+                    "message": "Must be a valid hex color code (e.g., #FF5733)"
+                  }
+                ],
+                "name": "hex",
+                "type": "string",
+                "title": "Hex Code"
+              }
+            ],
+            "type": "object",
+            "name": "color"
+          }
+        ],
+        "name": "colors",
+        "type": "array",
+        "title": "Available Colors"
+      }
+    ],
+    "name": "product",
+    "type": "document"
+  },
+  {
+    "fields": [
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "customerName",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "email",
+        "type": "string",
+        "title": "Customer Email"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "clerkUserId",
+        "type": "string",
+        "title": "Clerk User ID"
+      },
+      {
+        "of": [
+          {
+            "fields": [
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "to": [
+                  {
+                    "type": "product"
+                  }
+                ],
+                "name": "product",
+                "type": "reference"
+              },
+              {
+                "options": {
+                  "list": [
+                    {
+                      "title": "XS",
+                      "value": "XS"
+                    },
+                    {
+                      "title": "S",
+                      "value": "S"
+                    },
+                    {
+                      "title": "M",
+                      "value": "M"
+                    },
+                    {
+                      "title": "L",
+                      "value": "L"
+                    },
+                    {
+                      "title": "XL",
+                      "value": "XL"
+                    },
+                    {
+                      "title": "6",
+                      "value": "6"
+                    },
+                    {
+                      "title": "8",
+                      "value": "8"
+                    },
+                    {
+                      "title": "10",
+                      "value": "10"
+                    },
+                    {
+                      "title": "12",
+                      "value": "12"
+                    },
+                    {
+                      "title": "14",
+                      "value": "14"
+                    },
+                    {
+                      "title": "34",
+                      "value": "34"
+                    },
+                    {
+                      "title": "36",
+                      "value": "36"
+                    },
+                    {
+                      "title": "38",
+                      "value": "38"
+                    },
+                    {
+                      "title": "40",
+                      "value": "40"
+                    },
+                    {
+                      "title": "42",
+                      "value": "42"
+                    },
+                    {
+                      "title": "7",
+                      "value": "7"
+                    },
+                    {
+                      "title": "9",
+                      "value": "9"
+                    },
+                    {
+                      "title": "11",
+                      "value": "11"
+                    },
+                    {
+                      "title": "13",
+                      "value": "13"
+                    },
+                    {
+                      "title": "15",
+                      "value": "15"
+                    },
+                    {
+                      "title": "5",
+                      "value": "5"
+                    },
+                    {
+                      "title": "3",
+                      "value": "3"
+                    },
+                    {
+                      "title": "4",
+                      "value": "4"
+                    },
+                    {
+                      "title": "35",
+                      "value": "35"
+                    },
+                    {
+                      "title": "37",
+                      "value": "37"
+                    },
+                    {
+                      "title": "39",
+                      "value": "39"
+                    },
+                    {
+                      "title": "41",
+                      "value": "41"
+                    },
+                    {
+                      "title": "22",
+                      "value": "22"
+                    },
+                    {
+                      "title": "23",
+                      "value": "23"
+                    },
+                    {
+                      "title": "24",
+                      "value": "24"
+                    },
+                    {
+                      "title": "25",
+                      "value": "25"
+                    },
+                    {
+                      "title": "26",
+                      "value": "26"
+                    },
+                    {
+                      "title": "27",
+                      "value": "27"
+                    },
+                    {
+                      "title": "28",
+                      "value": "28"
+                    }
+                  ]
+                },
+                "name": "size",
+                "type": "string"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 1
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "quantity",
+                "type": "number"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      },
+                      {
+                        "flag": "min",
+                        "constraint": 0
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "price",
+                "type": "number",
+                "title": "Price Per Unit"
+              },
+              {
+                "validation": [
+                  {
+                    "rules": [
+                      {
+                        "flag": "presence",
+                        "constraint": "required"
+                      }
+                    ],
+                    "level": "error"
+                  }
+                ],
+                "name": "currency",
+                "type": "string"
+              }
+            ],
+            "type": "object"
+          }
+        ],
+        "name": "products",
+        "type": "array"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              },
+              {
+                "flag": "min",
+                "constraint": 0
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "totalPrice",
+        "type": "number"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "currency",
+        "type": "string"
+      },
+      {
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "amountDiscounted",
+        "type": "number"
+      },
+      {
+        "options": {
+          "list": [
+            "pending",
+            "paid",
+            "shipped",
+            "delivered",
+            "cancelled"
+          ]
+        },
+        "initialValue": "pending",
+        "validation": [
+          {
+            "rules": [
+              {
+                "flag": "valid",
+                "constraint": [
+                  "pending",
+                  "paid",
+                  "shipped",
+                  "delivered",
+                  "cancelled"
+                ]
+              },
+              {
+                "flag": "presence",
+                "constraint": "required"
+              }
+            ],
+            "level": "error"
+          }
+        ],
+        "name": "status",
+        "type": "string",
+        "title": "Order Status"
+      },
+      {
+        "name": "stripeSessionId",
+        "type": "string",
+        "title": "Stripe Session ID"
+      },
+      {
+        "name": "stripePaymentId",
+        "type": "string",
+        "title": "Stripe Payment ID"
+      },
+      {
+        "initialValue": false,
+        "name": "paid",
+        "type": "boolean"
+      },
+      {
+        "name": "orderDate",
+        "type": "datetime"
+      }
+    ],
+    "name": "order",
+    "type": "document",
+    "title": "Orders"
+  }
+]

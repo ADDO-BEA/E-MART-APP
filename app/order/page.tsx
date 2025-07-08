@@ -5,10 +5,33 @@ import { ORDER_QUERY } from "@/sanity/vision/query";
 import { useUser } from "@clerk/nextjs";
 
 
+type Product = {
+  product: {
+    _id: string;
+    name: string;
+  };
+  quantity: number;
+  size?: string;
+};
+
+type Order = {
+  _id: string;
+  customerName: string;
+  orderDate?: string;
+  status: string;
+  email: string;
+  currency: string;
+  totalPrice: number;
+  products: Product[];
+};
+
+
+
+
 function OrderPage() {
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
-  const [deletingId, setDeletingId] = useState<string | null>(null);
+  // const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const { user } = useUser();
 // api token that has write/delete access to orders
@@ -84,8 +107,8 @@ function OrderPage() {
               <div>
                 <div className="font-semibold mb-1">Product</div>
                 <ul className="pl-4 list-disc">
-                  {order.products?.map((product: any, index: number) => (
-                   <div key={`${product.product?._id}-${product.size}-${index}`}>
+                    {order.products?.map((product, index) => (
+                     <div key={`${product.product?._id}-${product.size}-${index}`}>
                     {product.product?.name || 'product'} 
                     <div className=" mb-2 text-grey-700"> 
                       quantity:{product.quantity}
@@ -94,7 +117,7 @@ function OrderPage() {
                       size:{product.size || 'N/A'}
                     </div>
                     </div>
-                  ))}
+                    ))}
                 </ul>
               </div>
             </div>

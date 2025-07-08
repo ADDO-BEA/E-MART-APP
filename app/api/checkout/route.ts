@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Invalid items' }, { status: 400 });
     }
 
-    const line_items = items.map((item: any) => ({
+    const line_items = items.map((item) => ({
       price_data: {
         currency: 'usd',
         product_data: {
@@ -53,12 +53,21 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ sessionId: session.id });
-  } catch (err: any) {
-    // console.error('Checkout error:', err);
+  }    catch (err: unknown) {
+    let message = 'Internal server error';
+    let details = null;
+
+    if (err instanceof Error) {
+      message = err.message;
+      // Optionally, if  expecting a 'raw' property on some errors:
+      // @ts-expect-error: Stripe errors may have a 'raw' property
+      details = err.raw?.message || null;
+    }
+
     return NextResponse.json(
       {
-        message: err.message || 'Internal server error',
-        details: err.raw?.message || null,
+        message,
+        details,
       },
       { status: 500 }
     );

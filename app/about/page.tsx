@@ -9,7 +9,7 @@ export default function AboutPage() {
             Our team is dedicated to innovation, creativity, and putting our customers first.
           </p>
           <p className="text-gray-700 leading-relaxed mb-5">
-            Our mission is to, "simplify online shopping" or "bring communities closer together". 
+            Our mission is to,&quot;simplify online shopping&quot; or &quot;bring communities closer together&quot;. 
             We are committed to providing exceptional value through our products/services.
           </p>
           <p className="text-gray-700 leading-relaxed">

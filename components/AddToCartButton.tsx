@@ -1,10 +1,21 @@
 "use client";
 import { transformToCartItem } from "@/lib/transformAddToCart";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Button } from "./ui/button";
-import { Product} from "@/sanity.types";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartSlice";
+
+type Product = {
+  _id: string;
+  name?: string;
+  description?: string;
+  slug?: { _type: "slug"; current: string };
+  category?: [];
+  sizes?: string[];
+
+};
+
+
 
 
 interface Props {
@@ -22,7 +33,7 @@ export function AddToCartButton({ product, quantity = 1, disabled, size }: Props
 
   const handleAddToCart = () => {
     const cartItem = {
-      ...transformToCartItem(product, quantity, size ?? "", ""),
+      ...transformToCartItem(product, quantity, size),
       sizes: size ?? "", // Ensure 'sizes' property is present
     };
     dispatch(addToCart(cartItem));

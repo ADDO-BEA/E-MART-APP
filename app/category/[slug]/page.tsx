@@ -1,7 +1,6 @@
 
 import {  getProductByCategory,   } from "@/sanity/vision";
 import React from "react";
-import Container from "@/components/Container"; 
 import ProductMap from "@/components/ProductMap";
 
 

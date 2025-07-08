@@ -1,6 +1,6 @@
 import { client } from '@/sanity/lib/client';
 import { NextRequest, NextResponse } from "next/server";;
-  import stripe  from "stripe";
+import stripe  from "stripe";
    
 
 
@@ -16,11 +16,14 @@ export async function POST(req: NextRequest){
     let event;
     try {
         event = stripeClient.webhooks.constructEvent(body, signature,process.env.STRIPE_WEBHOOK_SECRET!)
-    } catch (error:any) {
-        console.error('stripe webhook error:', error.message)
-        return NextResponse.json({error: 'webhook error'}, {status:400});
-        
-    }
+    } catch (error: unknown) {
+  if (error instanceof Error) {
+    console.error('stripe webhook error:', error.message);
+  } else {
+    console.error('stripe webhook error:', error);
+  }
+  return NextResponse.json({ error: 'webhook error' }, { status: 400 });
+}
     if (event.type === 'checkout.session.completed'){
         const session = event.data.object as stripe.Checkout.Session;
 
@@ -35,12 +38,12 @@ export async function POST(req: NextRequest){
                 customerName: session.customer_details?.name || 'unknown',
                 email: session.customer_details?.email || 'unknown',
                 clerkUserId: session.metadata?.clerkUserId || '',
-                products: lineItems.data.map((item: any) => ({
+                products: lineItems.data.map((item:stripe.LineItem) => ({
                     _key: item.id,
-                    product: {_type: 'reference', _ref: item.price.product.metadata.sanityId},
-                    size: item.price.product.metadata.size || '',
+                    product: {_type: 'reference', _ref:(item.price?.product as stripe.Product)?.metadata?.sanityId || ''},
+                    size: (item.price?.product as stripe.Product)?.metadata?.size || '',
                     quantity: item.quantity,
-                    price: item.price.unit_amount || 0,
+                    price: item.price?.unit_amount || 0,
                     currency: item.currency.toUpperCase() || 'USD',
                 })),
                 totalPrice: session.amount_total!/ 100,
@@ -52,7 +55,7 @@ export async function POST(req: NextRequest){
                 paid: true,
                 orderDate: new Date().toISOString(),
             })
-        } catch (error:any) {
+        } catch (error:unknown) {
             // console.error('sanity create error:', error.message);
        return NextResponse.json({error: 'sanity create error'}, {status: 500});
         }

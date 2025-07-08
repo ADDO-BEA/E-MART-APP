@@ -40,10 +40,6 @@ export default async function ProductPage({ params }: { params: { slug: string }
   {/* Product Details Section */}
   <div className="w-full h-full flex flex-col justify-between bg-white p-6 ">
   < ProductDetails product={product} />
-
-
-
-
   </div>
 </Container>
 

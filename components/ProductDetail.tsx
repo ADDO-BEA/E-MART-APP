@@ -8,10 +8,34 @@ import { addToCart } from "@/redux/slices/cartSlice";
 import SizeSelector from '@/components/SizeSelector';
 import SizeData from '@/components/SizeData';
 import { calculateDiscountedPrice } from "@/lib/priceUtils";
-import { Product as SanityProduct } from "@/sanity.types";
 
-type ProductWithClientFields = SanityProduct & {
-  size?: string[]; // Not used from Sanity, but kept for type compatibility
+
+interface Product {
+  _id: string;
+  name: string;
+  description?: string;
+  price: number;
+  discount?: number;
+  stock?: number;
+  category?: {
+    _ref: string;
+    _type: "reference";
+    _key: string;
+    title: string;
+  }[];
+  image?: {
+    _type: "image";
+    asset: { _ref: string; _type: "reference" };
+    
+  };
+}
+
+
+
+
+
+type ProductWithClientFields = Product & {
+  size?: string[];    
 };
 
 const ProductDetails = ({ product }: { product: ProductWithClientFields }) => {
@@ -19,7 +43,7 @@ const ProductDetails = ({ product }: { product: ProductWithClientFields }) => {
   const [selectedSize, setSelectedSize] = useState<string | null>(null);
   const [quantity, setQuantity] = useState<number>(1);
 
-  const categoryTitle = (product.category?.[0] as any)?.title?.toLowerCase() || "";
+  const categoryTitle = (product.category?.[0])?.title?.toLowerCase() || "";
   const isBag = categoryTitle.includes("bag");
   const isHeadphone = categoryTitle.includes("headphone");
   const sizeType = categoryTitle.includes("shoes") ? "shoes" : "clothing";
@@ -38,7 +62,7 @@ const ProductDetails = ({ product }: { product: ProductWithClientFields }) => {
       return;
     }
 
-    const cartItem = transformToCartItem(product, quantity, selectedSize ?? "", "");
+    const cartItem = transformToCartItem(product, quantity, selectedSize ?? "",);
     dispatch(addToCart(cartItem));
     toast.success(`${product.name} added to cart!`);
   };

@@ -25,7 +25,7 @@ interface CartItem {
   price: number;
   quantity: number;
   discount?: number;
-  slug:any;
+  slug: { _type: "slug"; current: string };
 
 }
 

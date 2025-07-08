@@ -1,9 +1,24 @@
-import { Product } from "@/sanity.types";
+import React from 'react';
 import { urlFor } from "@/sanity/lib/image";
 import Image from "next/image";
 import Link from "next/link";
 import { AddToCartButton } from '@/components/AddToCartButton';
 
+ 
+
+interface Product {
+  _id: string;
+  name: string;
+  description?: string;
+  price: number;
+  discount?: number;
+  stock?: number;
+  slug?: { _type: "slug"; current: string };
+  image?: {
+    _type: "image";
+    asset: { _ref: string; _type: "reference" };
+  };
+}
 
 
 interface Props {
@@ -38,8 +53,6 @@ function ProductCard({ product }: Props) {
         </div>
       
       </Link>
-      
-    
 
       {/* Product Details */}
       <div className="p-4 flex flex-col text-left flex-grow">
@@ -60,7 +73,7 @@ function ProductCard({ product }: Props) {
         </div>
 
         <div className="mt-4">
-          <AddToCartButton product={product} sizes={""} disabled={isOutOfStock} />
+          <AddToCartButton product={product} size={""} disabled={isOutOfStock} />
         </div>
       </div>
     </div>

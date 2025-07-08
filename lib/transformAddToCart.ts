@@ -1,4 +1,15 @@
-import { Product } from "@/sanity.types";
+
+type Product = {
+  _id: string;
+  name?: string;
+  description?: string;
+  slug?: { _type: "slug"; current: string };
+ category?: CategoryRef[];  
+  sizes?: string[];
+  
+};
+
+
 
 
 type CategoryRef = {
@@ -18,14 +29,19 @@ export interface CartItem extends Omit<Product, "slug" | "category" | "sizes"> {
 }
 
 export const transformToCartItem = (
-product: Product, quantity: number, size: string = "", p0: string): CartItem => {
+  product: Product,
+  quantity: number,
+  size: string = ""
+): CartItem => {
   const categoryRefs: CategoryRef[] = Array.isArray(product.category)
-    ? product.category.map((cat) => ({
-        _ref: cat._ref,
-        _type: "reference",
-        _key: cat._ref,
-        title: (cat as any).title ?? "",
-      }))
+    ? product.category.map((cat:CategoryRef) => {
+        return {
+          _ref: cat._ref,
+          _type: "reference",
+          _key: cat._ref,
+          title: cat.title ?? "", 
+        };
+      })
     : [];
 
   return {
