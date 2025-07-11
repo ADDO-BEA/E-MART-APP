@@ -55,7 +55,7 @@ export async function POST(req: NextRequest){
                 paid: true,
                 orderDate: new Date().toISOString(),
             })
-        } catch (error:unknown) {
+        } catch {
        return NextResponse.json({error: 'sanity create error'}, {status: 500});
         }
         

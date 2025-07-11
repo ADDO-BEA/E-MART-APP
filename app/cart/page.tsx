@@ -104,8 +104,7 @@ const CartItem = ({
       </button>
     </div>
   );
-};
-
+}
 function CartPage() {
   const dispatch = useDispatch();
   const { items } = useSelector((state: { cart: cartState }) => state.cart);
@@ -118,7 +117,7 @@ function CartPage() {
       checked ? newSet.add(id) : newSet.delete(id);
       return newSet;
     });
-  };
+  }
 
   const handleQuantityChange = (id: string, quantity: number) => {
     dispatch(updateQuantity({ id, quantity }));
@@ -135,8 +134,7 @@ function CartPage() {
   
 
   // State to manage loading state for checkout
-  // stripe- checkout ha
-
+  // stripe- checkout handler
   const [isLoading, setIsLoading] = useState(false);
   // function to handle checkout
 
@@ -157,7 +155,6 @@ function CartPage() {
       image: item.image ? urlFor(item.image).url() : '/placeholder-image.png'
     }));
     
-
     const res = await fetch('/api/checkout', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -202,10 +199,7 @@ const selectedTotalAmount = selectedCartItems.reduce(
     sum +
     (item.price - (item.discount ? (item.price * item.discount) / 100 : 0)) * item.quantity,
   0
-);
-
-
-
+)
   return (
     <div className="p-6 mt-6 max-w-screen-lg mx-auto mb-6 border border-gray-300 rounded-lg shadow-lg">
       <div className="mb-4">
@@ -267,7 +261,7 @@ const selectedTotalAmount = selectedCartItems.reduce(
       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.372 0 0 5.372 0 12h4z" />
     </svg>
-    Processing...
+   <span>Processing...</span>
   </span>
 ) : 'Proceed to Checkout'}
 
