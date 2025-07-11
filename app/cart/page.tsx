@@ -9,7 +9,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { urlFor } from "@/sanity/lib/image";
 import { calculateDiscountedPrice } from '@/lib/priceUtils';
-import { loadStripe} from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 
 interface cartState {
   items: CartItem[];
@@ -26,9 +26,7 @@ interface CartItem {
   quantity: number;
   discount?: number;
   slug: { _type: "slug"; current: string };
-
 }
-
 
 const CartItem = ({
   item,
@@ -43,7 +41,6 @@ const CartItem = ({
   isSelected: boolean;
   onSelect: (checked: boolean) => void;
 }) => {
- 
   const discountedPrice = calculateDiscountedPrice(item.price, item.discount);
 
   return (
@@ -55,12 +52,10 @@ const CartItem = ({
         className="mr-5 w-6 h-6 border-gray-300 rounded bg-white accent-black"
       />
 
-<Link href={`/product/${item.slug.current}`}>
-
+      <Link href={`/product/${item.slug.current}`}>
         <div className="w-full h-30 overflow-hidden aspect-[4/3]">
           <Image
-            // In CartItem component
-            src={item.image ? urlFor(item.image).url() :"/placeholder-image.png"}
+            src={item.image ? urlFor(item.image).url() : "/placeholder-image.png"}
             alt={item.name ?? "Product image"}
             width={100}
             height={50}
@@ -71,7 +66,7 @@ const CartItem = ({
 
       <div className="flex-grow">
         <p className="font-semibold">{item.name}</p>
-        <p className="text-gray-500">Size:{item.size}</p>
+        <p className="text-gray-500">Size: {item.size}</p>
         <div className="flex items-center space-x-2">
           <span className="text-red-400 font-bold">{`$${discountedPrice.toFixed(2)}`}</span>
           <span className="text-gray-500 line-through">{`$${item.price.toFixed(2)}`}</span>
@@ -103,7 +98,8 @@ const CartItem = ({
       </button>
     </div>
   );
-}
+};
+
 function CartPage() {
   const dispatch = useDispatch();
   const { items } = useSelector((state: { cart: cartState }) => state.cart);
@@ -129,7 +125,7 @@ function CartPage() {
 
   const handleClearCart = () => {
     dispatch(clearCart());
-  }
+  };
 
   const handleCheckout = async () => {
     const selectedProduct = items.filter((item) => selectedItems.has(item._id));
@@ -245,11 +241,11 @@ function CartPage() {
           ) : 'Proceed to Checkout'}
         </button>
       ) : (
-        <div className="w-full bg-black text-white py-2 rounded">
-          <SignInButton mode="modal">
+        <SignInButton>
+          <button className="w-full bg-black text-white py-2 rounded">
             Sign In to Checkout
-          </SignInButton>
-        </div>
+          </button>
+        </SignInButton>
       )}
     </div>
   );
