@@ -30,7 +30,6 @@ interface CartItem {
 }
 
 
-
 const CartItem = ({
   item,
   onQuantityChange,
@@ -246,11 +245,11 @@ function CartPage() {
           ) : 'Proceed to Checkout'}
         </button>
       ) : (
-        <SignInButton>
-          <button className="w-full bg-black text-white py-2 rounded">
+        <div className="w-full bg-black text-white py-2 rounded">
+          <SignInButton mode="modal">
             Sign In to Checkout
-          </button>
-        </SignInButton>
+          </SignInButton>
+        </div>
       )}
     </div>
   );
