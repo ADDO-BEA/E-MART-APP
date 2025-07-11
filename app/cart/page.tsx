@@ -110,6 +110,7 @@ function CartPage() {
   const { items } = useSelector((state: { cart: cartState }) => state.cart);
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
   const { isSignedIn, user } = useUser();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleItemSelect = (id: string, checked: boolean) => {
     setSelectedItems((prev) => {
@@ -117,7 +118,7 @@ function CartPage() {
       checked ? newSet.add(id) : newSet.delete(id);
       return newSet;
     });
-  }
+  };
 
   const handleQuantityChange = (id: string, quantity: number) => {
     dispatch(updateQuantity({ id, quantity }));
@@ -129,77 +130,57 @@ function CartPage() {
 
   const handleClearCart = () => {
     dispatch(clearCart());
-    
-  };
-  
-
-  // State to manage loading state for checkout
-  // stripe- checkout handler
-  const [isLoading, setIsLoading] = useState(false);
-  // function to handle checkout
+  }
 
   const handleCheckout = async () => {
-  const selectedProduct = items.filter((item) => selectedItems.has(item._id));
-
-  if (selectedProduct.length === 0) {
-    alert('Please select items to checkout');
-    return;
-  }
-  setIsLoading(true)
-
-  try {
-  
-    const checkoutItems = selectedProduct.map(item => ({
-      ...item,
-    
-      image: item.image ? urlFor(item.image).url() : '/placeholder-image.png'
-    }));
-    
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        items: checkoutItems,
-        customer: {
-          email: user?.primaryEmailAddress?.emailAddress || "",
-          clerkUserId: user?.id || "",
-        }
-      })
-    });
-
-    const data = await res.json();
-    
-    if (!res.ok) {
-      throw new Error(data.message || 'Failed to create checkout session');
+    const selectedProduct = items.filter((item) => selectedItems.has(item._id));
+    if (selectedProduct.length === 0) {
+      alert('Please select items to checkout');
+      return;
     }
+    setIsLoading(true);
+    try {
+      const checkoutItems = selectedProduct.map(item => ({
+        ...item,
+        image: item.image ? urlFor(item.image).url() : '/placeholder-image.png'
+      }));
+      const res = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          items: checkoutItems,
+          customer: {
+            email: user?.primaryEmailAddress?.emailAddress || "",
+            clerkUserId: user?.id || "",
+          }
+        })
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.message || 'Failed to create checkout session');
+      }
+      const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+      dispatch(clearCart());
+      await stripe?.redirectToCheckout({ sessionId: data.sessionId });
+    } catch (error) {
+      alert(`Checkout failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    const stripe = await loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
-    // clear selected item after checkout 
-    dispatch((clearCart()));
-    await stripe?.redirectToCheckout({ sessionId: data.sessionId });
-    
-  } catch (error) {
-    // console.error('Checkout error:', error);
-    alert(`Checkout failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
-  } finally{
-    setIsLoading(false);
-  }
-};
-  // subtotal and total calculation
-  // calculation of subtotal 
-const selectedCartItems = items.filter((item) => selectedItems.has(item._id));
+  const selectedCartItems = items.filter((item) => selectedItems.has(item._id));
+  const selectedSubtotal = selectedCartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
+  const selectedTotalAmount = selectedCartItems.reduce(
+    (sum, item) =>
+      sum +
+      (item.price - (item.discount ? (item.price * item.discount) / 100 : 0)) * item.quantity,
+    0
+  );
 
-const selectedSubtotal = selectedCartItems.reduce(
-  (sum, item) => sum + item.price * item.quantity,
-  0
-);
-// /calculation of total 
-const selectedTotalAmount = selectedCartItems.reduce(
-  (sum, item) =>
-    sum +
-    (item.price - (item.discount ? (item.price * item.discount) / 100 : 0)) * item.quantity,
-  0
-)
   return (
     <div className="p-6 mt-6 max-w-screen-lg mx-auto mb-6 border border-gray-300 rounded-lg shadow-lg">
       <div className="mb-4">
@@ -246,35 +227,31 @@ const selectedTotalAmount = selectedCartItems.reduce(
         </button>
       </div>
 
-     
- {isSignedIn ? (
-  <button
-    onClick={handleCheckout}
-    disabled={isLoading}
-    className={`w-full bg-black text-white py-2 rounded ${
-      isLoading ? 'opacity-60 cursor-not-allowed' : ''
-    }`}
-  >
-    {isLoading ? (
-  <span className="flex items-center justify-center gap-2">
-    <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
-      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.372 0 0 5.372 0 12h4z" />
-    </svg>
-   <span>Processing...</span>
-  </span>
-) : 'Proceed to Checkout'}
-
-  </button>
-) : (
-  <SignInButton>
-    <button className="w-full bg-black text-white py-2 rounded">
-      Sign In to Checkout
-    </button>
-  </SignInButton>
-)}
-
-
+      {isSignedIn ? (
+        <button
+          onClick={handleCheckout}
+          disabled={isLoading}
+          className={`w-full bg-black text-white py-2 rounded ${
+            isLoading ? 'opacity-60 cursor-not-allowed' : ''
+          }`}
+        >
+          {isLoading ? (
+            <span className="flex items-center justify-center gap-2">
+              <svg className="animate-spin h-5 w-5 text-white" viewBox="0 0 24 24">
+                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.372 0 0 5.372 0 12h4z" />
+              </svg>
+              <span>Processing...</span>
+            </span>
+          ) : 'Proceed to Checkout'}
+        </button>
+      ) : (
+        <SignInButton>
+          <button className="w-full bg-black text-white py-2 rounded">
+            Sign In to Checkout
+          </button>
+        </SignInButton>
+      )}
     </div>
   );
 }
