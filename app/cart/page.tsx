@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateQuantity, removeFromCart, clearCart } from '@/redux/slices/cartSlice';
@@ -99,7 +98,6 @@ const CartItem = ({
     </div>
   );
 };
-
 function CartPage() {
   const dispatch = useDispatch();
   const { items } = useSelector((state: { cart: cartState }) => state.cart);
@@ -108,12 +106,17 @@ function CartPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleItemSelect = (id: string, checked: boolean) => {
-    setSelectedItems((prev) => {
-      const newSet = new Set(prev);
-      checked ? newSet.add(id) : newSet.delete(id);
-      return newSet;
-    });
-  };
+  setSelectedItems((prev) => {
+    const newSet = new Set(prev);
+    if (checked) {
+      newSet.add(id);
+    } else {
+      newSet.delete(id);
+    }
+    return newSet;
+  });
+};
+
 
   const handleQuantityChange = (id: string, quantity: number) => {
     dispatch(updateQuantity({ id, quantity }));
