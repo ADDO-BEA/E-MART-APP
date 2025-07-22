@@ -4,17 +4,15 @@ import React from "react";
 import ProductMap from "@/components/ProductMap";
 
 
-interface Props {
+interface PageProps {
   params: { slug: string };
 }
-
-const Page = async ({ params }: Props) => {
+const Page = async ({ params }: PageProps) => {
   const { slug } = params; 
 const product = await getProductByCategory(slug); 
   return (
 
       <div className=' m-4'>
-      
       <div>
        { product.length > 0 ? (
             <ProductMap products={product}/>
