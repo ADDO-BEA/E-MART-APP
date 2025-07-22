@@ -11,11 +11,10 @@ export type SALE_QUERYResult = Array<{
   title?: string;
   description?: string;
   couponCode?: string;
-  image?: any;
+  image?: string;
 }>;
-
 function Banner({ sales }: { sales: SALE_QUERYResult }) {
-  const sale = sales?.[0]; // Get the first sale as the banner content
+  const sale = sales?.[0]; 
 
   if (!sale) {
     return <div className="text-center text-gray-500 py-10">No ongoing sales at the moment.</div>;
