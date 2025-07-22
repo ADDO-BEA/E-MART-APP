@@ -5,7 +5,6 @@ import Container from "@/components/Container";
 import CategoryPopover from "@/components/CategoryPopover";
 
 
-
 export default async function Home() {
   const products = (await getProducts()) || [];  
   const sales = await getSale();
@@ -21,7 +20,7 @@ export default async function Home() {
       <Container className="space-y-6">
         
         <Banner sales={sales} />
-
+        
         <ProductList  products={products} title={true} categories={categories} />
       </Container>
     </div>

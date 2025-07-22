@@ -1,5 +1,4 @@
 "use client";
-
 import { FaShoppingCart } from "react-icons/fa";
 import Link from 'next/link';
 import { useSelector } from 'react-redux';

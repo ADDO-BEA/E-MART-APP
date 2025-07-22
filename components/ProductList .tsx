@@ -1,14 +1,30 @@
-import { Category, type Product } from "@/sanity.types";
+import React from 'react';
 import ProductMap from '@/components/ProductMap'
+
+interface Product {
+  _id: string;
+  name: string;
+  price: number;
+  categories: Category[];
+  stock?: number | undefined;
+  
+}
+interface Category {
+  _id: string;
+  title: string;
+  slug?: {
+    current: string;
+  };
+}
 
 interface Props {
   products: Product[];
   title?: boolean;
   categories: Category[];
-  stock?: number| undefined
+  stock?: number | undefined;
 }
 
-function Product({ products, }: Props) {
+function Product({ products }: Props) {
   return (
     <div className="w-full max-w-screen-xl mx-auto my-10">
       {/* Section Title */}
@@ -19,5 +35,6 @@ function Product({ products, }: Props) {
     </div>
   );
 }
+
 
 export default Product;

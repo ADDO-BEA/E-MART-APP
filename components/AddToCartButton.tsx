@@ -15,9 +15,6 @@ type Product = {
 
 };
 
-
-
-
 interface Props {
   product: Product;
   disabled?: boolean;

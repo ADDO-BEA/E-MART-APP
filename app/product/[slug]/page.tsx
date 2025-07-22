@@ -10,7 +10,7 @@ import ProductDetails from "@/components/ProductDetail";
 
 
 export default async function ProductPage({ params }: { params: { slug: string } }) {
-  const { slug } = await params; 
+  const { slug } = params; 
 
 
   const product = await getProduct(slug);

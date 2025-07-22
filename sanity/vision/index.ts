@@ -3,11 +3,6 @@ import { CATEGORIES_QUERY,  PRODUCTS_QUERY, SALE_QUERY, PRODUCT_SEARCH_QUERY, PR
 import {PRODUCT_BY_SLUG,} from './query'
 
 
-
-
-
-
-
 export const getOrder =async (userId:string) =>{
     try {
         const order = await sanityFetch({

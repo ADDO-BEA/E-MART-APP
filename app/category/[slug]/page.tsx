@@ -9,10 +9,8 @@ interface Props {
 }
 
 const Page = async ({ params }: Props) => {
-  const { slug } = await params; 
+  const { slug } = params; 
 const product = await getProductByCategory(slug); 
- 
-
   return (
 
       <div className=' m-4'>

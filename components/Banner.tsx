@@ -1,10 +1,18 @@
-import { SALE_QUERYResult } from '@/sanity.types';
 import React from 'react';
 import { Card, CardContent } from './ui/card';
 import { Badge } from './ui/badge';
 import Image from 'next/image';
 import { urlFor } from '@/sanity/lib/image';
 import { Button } from './ui/button';
+
+export type SALE_QUERYResult = Array<{
+  badge?: string;
+  discountAmount?: number;
+  title?: string;
+  description?: string;
+  couponCode?: string;
+  image?: any;
+}>;
 
 function Banner({ sales }: { sales: SALE_QUERYResult }) {
   const sale = sales?.[0]; // Get the first sale as the banner content
